@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QScrollArea>
 #include <QFile>
+#include <QTime>
 
 class QPlotter : public QWidget
 {
@@ -17,6 +18,7 @@ private:
     double           fscale;
     QFile            *file;
     bool             rt_mode;
+    QTime            *start_time;
 public:
     QScrollArea     *dad;
 
@@ -28,6 +30,7 @@ public:
     double   PixelToTime(int pixel);
     int     TimeToPixel(double time);
 
+    void    NewValue(float v);
 
     void    SetArray(QVector<float> *array);
     float   CenterTime();

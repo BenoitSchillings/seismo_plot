@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-    QPlotter *plotter = new QPlotter();
+    plotter = new QPlotter();
     plotter->resize(2114000, 596);
     QScrollArea *scrollArea = new QScrollArea;
     //scrollArea->setBackgroundRole(QPalette::Light);
@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(scrollArea);
     scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff);
     scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff);
-
 }
 
 MainWindow::~MainWindow()

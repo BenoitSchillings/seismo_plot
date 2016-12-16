@@ -1,14 +1,16 @@
 #include <QtWidgets>
 #include "qplotter.h"
+#include <QTime>
 
 #define BIGTICK     250
 #define SMALLTICK   5
 
+int blog (const char * format, ... );
 
 QPlotter::QPlotter(QWidget *parent) : QWidget(parent)
 {
-    time_per_sample = 1.0/25.2;
-    time_per_pixel = 0.05;
+    time_per_sample = 0.06;
+    time_per_pixel = 0.06;
     large_tick_time = time_per_pixel * 200;
     small_tick_time = time_per_pixel * 50;
     setWindowTitle(tr("Sismo"));
@@ -18,8 +20,24 @@ QPlotter::QPlotter(QWidget *parent) : QWidget(parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(load()));
     timer->start(110);
     rt_mode = true;
+    start_time = new QTime(QTime::currentTime());
+
 }
 
+void QPlotter::NewValue(float v)
+{
+    data->append(v);
+
+    //blog("new value %f", v);
+
+    if (rt_mode) {
+        SetCenterTime(data->size() * time_per_sample);
+        this->update();
+    }
+    else {
+        this->update();
+    }
+}
 
 void QPlotter::InitLoad()
 {
@@ -147,7 +165,11 @@ int QPlotter::TimeToPixel(double time)
 
 QString QPlotter::TimeToString(float time)
 {
-    return QDateTime::fromTime_t(time).toUTC().toString("hh:mm:ss");
+   QTime t(*start_time);
+
+    t = t.addMSecs((int)(1000*time));
+
+    return t.toString("hh:mm:ss");
 }
 
 void QPlotter::paintEvent(QPaintEvent *evt)
