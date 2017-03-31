@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     plotter = new QPlotter();
-    plotter->resize(2114000, 596);
+    plotter->resize(4114000, 896);
     QScrollArea *scrollArea = new QScrollArea;
     //scrollArea->setBackgroundRole(QPalette::Light);
     plotter->dad = scrollArea;

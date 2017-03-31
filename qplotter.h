@@ -19,6 +19,7 @@ private:
     QFile            *file;
     bool             rt_mode;
     QTime            *start_time;
+    double           v0;
 public:
     QScrollArea     *dad;
 

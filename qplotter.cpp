@@ -9,27 +9,35 @@ int blog (const char * format, ... );
 
 QPlotter::QPlotter(QWidget *parent) : QWidget(parent)
 {
-    time_per_sample = 0.06;
+    time_per_sample = 0.035;
     time_per_pixel = 0.06;
     large_tick_time = time_per_pixel * 200;
     small_tick_time = time_per_pixel * 50;
     setWindowTitle(tr("Sismo"));
     InitLoad();
-    fscale = 100;
+    fscale = 10.001;
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(load()));
     timer->start(110);
     rt_mode = true;
     start_time = new QTime(QTime::currentTime());
-
+    v0 = 0;
 }
 
 void QPlotter::NewValue(float v)
 {
+    float temp;
+
+    temp = v0;
+    v0 = (v0*4.0 + v) / 5.0;
+
+    v = v - temp;
+
     data->append(v);
 
-    //blog("new value %f", v);
-
+    if (data->size() % 50000 == 0) {
+        blog("data %d %f", data->size(), v);
+    }
     if (rt_mode) {
         SetCenterTime(data->size() * time_per_sample);
         this->update();
@@ -110,14 +118,14 @@ double QPlotter::fx(double time, double height)
 
     float v = 0;
 
-
+/*
     for (int i = 0; i < cnt; i++) {
         v = v + data->at(sample_pos);
         sample_pos++;
     }
     v = height + v / (cnt * fscale);
+*/
 
-/*
     for (int i = 0; i <= cnt; i++) {
         float cv = data->at(sample_pos);
 
@@ -127,7 +135,7 @@ double QPlotter::fx(double time, double height)
 
 
     v = v/fscale + height;
-*/
+
     return v;
 }
 
@@ -292,12 +300,12 @@ void QPlotter::keyPressEvent(QKeyEvent * event)
     switch(event->key()) {
         case Qt::Key_Up:
          fscale *= 1.1;
-         if (fscale > 1240) fscale = 1240.0;
+         if (fscale > 111240) fscale = 111240.0;
          this->update();
          break;
         case Qt::Key_Down:
          fscale /= 1.1;
-         if (fscale < 0.01) fscale = 0.01;
+         if (fscale < 0.01) fscale = 0.0001;
          this->update();
          break;
         case Qt::Key_Right:

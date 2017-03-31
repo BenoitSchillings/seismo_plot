@@ -56,6 +56,7 @@ private:
     QLowEnergyController *m_control;
     QLowEnergyService *m_service;
     QPlotter    *vtarget;
+    float       v0;
 };
 
 #endif // HEARTRATE_H
